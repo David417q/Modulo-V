@@ -1,0 +1,53 @@
+
+
+sudo firewall-cmd --permanent --add-service=high-availability
+sudo firewall-cmd --reload
+
+sudo dnf install pcs -y
+sudo systemctl enable pcsd --now
+sudo passwd hacluster
+
+
+sudo pcs host auth node1 addr=192.168.0.18 node2 addr=192.168.0.23 -u hacluster (hacluster es la contraseña)
+
+
+sudo pcs cluster setup pacemaker1 node1 addr=192.168.0.18 node2 addr=192.168.0.23
+
+
+sudo systemctl enable --now corosync
+
+sudo pcs cluster start --all
+
+en ambas maquinas
+
+sudo systemctl enable pacemaker.service
+
+sudo pcs cluster enable --all
+
+
+sudo pcs resource create virtual_ip ocf:heartbeat:IPaddr2 ip=192.168.100.30 cidr_netmask=24 nic=ens160 op monitor interval=30s
+
+
+sudo pcs property set stonith-enabled=false
+
+
+
+sudo systemctl start corosync
+sudo systemctl start pacemaker
+sudo systemctl enable corosync
+sudo systemctl enable pacemaker
+
+
+sudo reboot
+
+pcs resource debug-start virtual_ip
+
+sudo pcs status
+
+sudo pcs resource enable virtual_ip
+
+sudo pcs cluster start
+
+
+
+

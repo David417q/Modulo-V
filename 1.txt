@@ -1,0 +1,53 @@
+
+
+
+sudo dnf install -y rsync
+
+ssh-keygen -t rsa -b 4096
+
+mkdir prueba
+ls
+cd prueba
+touch test{1..100}
+ls 
+
+
+
+
+
+ssh-copy-id user@192.168.1.200
+
+
+sudo service sshd status 
+sudo service sshd start 
+
+
+
+
+
+rsync -a ~/prueba davidcabrera@192.168.0.12:/home/davidcabrera/
+
+
+
+
+en la maquina original
+
+ls
+cd /home/davidcabrera
+cd prueba
+nano test1
+
+
+rsync -a ~/prueba davidcabrera@192.168.0.12:/home/davidcabrera/
+
+
+
+mkdir cron
+crontab -e
+
+*/1* * * * rsync -a /home/davidcabrera/cron davidcabrera@192.168.0.18:/home/davidcabrera
+
+
+
+
+
